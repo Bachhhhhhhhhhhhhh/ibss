@@ -3,12 +3,14 @@
 import { useEffect, type ReactNode } from "react";
 import Lenis from "lenis";
 import { useReducedMotion } from "@/lib/hooks/use-reduced-motion";
+import { usePerformanceStore } from "@/lib/stores/performance";
 
 export function SmoothScroll({ children }: { children: ReactNode }) {
   const reduced = useReducedMotion();
+  const lenisEnabled = usePerformanceStore((s) => s.settings.lenis);
 
   useEffect(() => {
-    if (reduced) return;
+    if (reduced || !lenisEnabled) return;
 
     const lenis = new Lenis({
       duration: 1.1,
@@ -37,7 +39,7 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
       document.removeEventListener("visibilitychange", onVis);
       lenis.destroy();
     };
-  }, [reduced]);
+  }, [reduced, lenisEnabled]);
 
   return <>{children}</>;
 }

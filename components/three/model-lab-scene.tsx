@@ -4,17 +4,7 @@ import { useState, Suspense } from "react";
 import { OrbitControls } from "@react-three/drei";
 import { ThreeCanvasShell } from "@/components/three/three-canvas-shell";
 import { FriendlyStage } from "@/lib/three/friendly-stage";
-import { HuiguiMegastructure } from "@/components/three/models/huigui-megastructure";
-import { EsgGlobe } from "@/components/three/models/esg-globe";
-import { CarbonLattice } from "@/components/three/models/carbon-lattice";
-import { MycorrhizalNetwork } from "@/components/three/models/mycorrhizal-network";
-import { SmartGridCity } from "@/components/three/models/smart-grid-city";
-import { HydroLoop } from "@/components/three/models/hydro-loop";
-import { RiceFractal } from "@/components/three/models/rice-fractal";
-import { BiodiversityHelix } from "@/components/three/models/biodiversity-helix";
-import { QuantLandscape } from "@/components/three/models/quant-landscape";
-import { PredictionWave } from "@/components/three/models/prediction-wave";
-import { IntelNexus } from "@/components/three/models/intel-nexus";
+import { ModelComponents } from "@/components/three/model-registry";
 
 const CAMERA_MAP: Record<string, { position: [number, number, number]; fov?: number }> = {
   "huigui-twin": { position: [5, 4, 7], fov: 42 },
@@ -46,20 +36,11 @@ const ACCENT_MAP: Record<string, string> = {
 
 function ModelScene({ modelId, autoRotate }: { modelId: string; autoRotate: boolean }) {
   const accent = ACCENT_MAP[modelId] ?? "#10b981";
+  const Model = ModelComponents[modelId];
 
   return (
     <FriendlyStage accent={accent}>
-      {modelId === "huigui-twin" && <HuiguiMegastructure />}
-      {modelId === "esg-globe" && <EsgGlobe />}
-      {modelId === "carbon-lattice" && <CarbonLattice />}
-      {modelId === "mycorrhizal" && <MycorrhizalNetwork />}
-      {modelId === "smart-grid" && <SmartGridCity />}
-      {modelId === "hydro-loop" && <HydroLoop />}
-      {modelId === "rice-fractal" && <RiceFractal />}
-      {modelId === "biodiversity-helix" && <BiodiversityHelix />}
-      {modelId === "quant-engine" && <QuantLandscape />}
-      {modelId === "prediction-oracle" && <PredictionWave />}
-      {modelId === "intel-nexus" && <IntelNexus />}
+      {Model && <Model />}
       <OrbitControls
         enablePan={false}
         minDistance={4}

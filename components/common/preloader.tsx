@@ -5,12 +5,14 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Leaf, Sparkles } from "lucide-react";
 import { useReducedMotion } from "@/lib/hooks/use-reduced-motion";
 import { useI18nStore } from "@/lib/stores/i18n";
+import { preloadCriticalAssets } from "@/lib/performance/asset-preload";
 
 export function Preloader() {
   const reduced = useReducedMotion();
   const language = useI18nStore((s) => s.language);
   const [done, setDone] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [label, setLabel] = useState("");
   const [phase, setPhase] = useState<"loading" | "ready">("loading");
 
   useEffect(() => {
@@ -19,27 +21,28 @@ export function Preloader() {
       return;
     }
 
-    const duration = 2200;
-    const start = Date.now();
-    const finish = () => {
-      setProgress(100);
-      setPhase("ready");
-      setTimeout(() => setDone(true), 400);
-    };
+    let cancelled = false;
 
-    const timer = setInterval(() => {
-      const p = Math.min(100, ((Date.now() - start) / duration) * 100);
-      setProgress(p);
-      if (p >= 100) {
-        clearInterval(timer);
-        finish();
+    preloadCriticalAssets((pct, stepLabel) => {
+      if (cancelled) return;
+      setProgress(pct);
+      if (stepLabel) setLabel(stepLabel);
+      if (pct >= 100) setPhase("ready");
+    }).then(() => {
+      if (cancelled) return;
+      setTimeout(() => setDone(true), 350);
+    });
+
+    const safety = setTimeout(() => {
+      if (!cancelled) {
+        setProgress(100);
+        setPhase("ready");
+        setTimeout(() => setDone(true), 300);
       }
-    }, 40);
-
-    const safety = setTimeout(finish, 4500);
+    }, 6000);
 
     return () => {
-      clearInterval(timer);
+      cancelled = true;
       clearTimeout(safety);
     };
   }, [reduced]);
@@ -57,7 +60,6 @@ export function Preloader() {
         >
           <div className="preloader-scan" />
           <div className="mesh-grid absolute inset-0 opacity-30" />
-
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_50%,rgba(16,185,129,0.12),transparent)]" />
 
           <motion.div
@@ -84,20 +86,22 @@ export function Preloader() {
               {language === "en" ? "Crafting Engma's Global ESG Future" : "Kiến tạo Tương lai ESG Toàn cầu Engma"}
             </p>
 
-            <div className="w-56 h-[3px] bg-white/8 rounded-full overflow-hidden mb-3">
+            <div className="w-64 h-[3px] bg-white/8 rounded-full overflow-hidden mb-3">
               <motion.div
                 className="h-full rounded-full bg-gradient-to-r from-emerald-600 via-emerald-400 to-amber-400"
                 style={{ width: `${progress}%` }}
-                transition={{ duration: 0.1 }}
+                transition={{ duration: 0.15 }}
               />
             </div>
 
-            <p className="text-xs font-mono text-emerald-400/70 tabular-nums">
+            <p className="text-xs font-mono text-emerald-400/70 tabular-nums min-h-[1rem]">
               {phase === "ready"
                 ? language === "en"
                   ? "Ready"
                   : "Sẵn sàng"
-                : `${Math.round(progress)}%`}
+                : label
+                  ? `${Math.round(progress)}% · ${label}`
+                  : `${Math.round(progress)}%`}
             </p>
           </motion.div>
         </motion.div>

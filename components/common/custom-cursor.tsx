@@ -3,6 +3,7 @@
 import { useEffect, useState, useSyncExternalStore } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 import { useReducedMotion } from "@/lib/hooks/use-reduced-motion";
+import { usePerformanceStore } from "@/lib/stores/performance";
 
 function subscribeFinePointer(onChange: () => void) {
   const mq = window.matchMedia("(pointer: fine)");
@@ -25,7 +26,8 @@ function useFinePointer() {
 export function CustomCursor() {
   const reduced = useReducedMotion();
   const finePointer = useFinePointer();
-  const enabled = !reduced && finePointer;
+  const cursorEnabled = usePerformanceStore((s) => s.settings.customCursor);
+  const enabled = !reduced && finePointer && cursorEnabled;
   const [hovering, setHovering] = useState(false);
   const x = useMotionValue(-100);
   const y = useMotionValue(-100);

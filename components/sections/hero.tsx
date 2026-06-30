@@ -70,11 +70,13 @@ export function HeroSection() {
     <section ref={heroRef} className="relative min-h-screen flex flex-col justify-center overflow-hidden" aria-label="Hero">
       <HeroParticles isVisible={heroInView} />
 
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_35%,rgba(16,185,129,0.14),transparent_65%)] pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_35%,rgba(16,185,129,0.18),transparent_65%)] pointer-events-none" />
       <div className="absolute inset-0 cinematic-vignette pointer-events-none" />
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background pointer-events-none" />
       <div className="absolute inset-0 pattern-leaves opacity-30 pointer-events-none" />
       <div className="absolute inset-0 mesh-grid opacity-40 pointer-events-none" />
+      <div className="absolute inset-0 hero-energy-ring pointer-events-none" aria-hidden="true" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[min(90vw,800px)] h-[min(90vw,800px)] rounded-full border border-emerald-500/[0.06] pointer-events-none hero-orbit-ring" aria-hidden="true" />
 
       <div className="absolute top-24 left-8 w-px h-32 bg-gradient-to-b from-emerald-500/50 via-emerald-500/20 to-transparent hidden lg:block" aria-hidden="true" />
       <div className="absolute top-24 right-8 w-px h-32 bg-gradient-to-b from-amber-500/40 via-amber-500/15 to-transparent hidden lg:block" aria-hidden="true" />

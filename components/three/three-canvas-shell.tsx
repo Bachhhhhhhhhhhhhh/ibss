@@ -2,6 +2,7 @@
 
 import { Suspense, useEffect, useRef, type ReactNode } from "react";
 import { Canvas } from "@react-three/fiber";
+import { usePerformanceStore } from "@/lib/stores/performance";
 
 interface ThreeCanvasShellProps {
   children: ReactNode;
@@ -21,6 +22,7 @@ export function ThreeCanvasShell({
   className = "",
 }: ThreeCanvasShellProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const settings = usePerformanceStore((s) => s.settings);
 
   useEffect(() => {
     const el = containerRef.current;
@@ -37,8 +39,8 @@ export function ThreeCanvasShell({
     >
       <Canvas
         camera={{ position: camera.position, fov: camera.fov ?? 45 }}
-        dpr={[1, 1.25]}
-        gl={{ antialias: true, alpha: false, powerPreference: "high-performance" }}
+        dpr={[1, settings.dprMax]}
+        gl={{ antialias: settings.antialias, alpha: false, powerPreference: "high-performance" }}
         frameloop={isVisible ? "always" : "demand"}
         style={{ background: "#021a0f" }}
       >

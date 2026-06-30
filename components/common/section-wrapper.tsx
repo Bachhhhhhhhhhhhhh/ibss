@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useReducedMotion } from "@/lib/hooks/use-reduced-motion";
+import { usePerformanceStore } from "@/lib/stores/performance";
 import { cn } from "@/lib/utils";
 
 interface SectionWrapperProps {
@@ -27,10 +28,13 @@ export function SectionWrapper({
   align = "center",
 }: SectionWrapperProps) {
   const reduced = useReducedMotion();
+  const parallax = usePerformanceStore((s) => s.settings.sectionParallax);
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
   const numberY = useTransform(scrollYProgress, [0, 1], [40, -40]);
-  const numberOpacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0.02, 0.04, 0.04, 0.02]);
+  const numberOpacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0.02, 0.05, 0.05, 0.02]);
+  const contentY = useTransform(scrollYProgress, [0, 1], [24, -24]);
+  const useMotion = !reduced && parallax;
 
   return (
     <section
@@ -42,14 +46,17 @@ export function SectionWrapper({
       {sectionNumber && (
         <motion.div
           className="absolute top-8 right-4 md:right-8 font-display text-[8rem] md:text-[14rem] leading-none text-foreground/[0.025] select-none pointer-events-none"
-          style={reduced ? {} : { y: numberY, opacity: numberOpacity }}
+          style={useMotion ? { y: numberY, opacity: numberOpacity } : {}}
           aria-hidden="true"
         >
           {sectionNumber}
         </motion.div>
       )}
 
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
+      <motion.div
+        className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10"
+        style={useMotion ? { y: contentY } : undefined}
+      >
         {(eyebrow || title || subtitle) && (
           <motion.div
             initial={reduced ? false : { opacity: 0, y: 50 }}
@@ -93,7 +100,7 @@ export function SectionWrapper({
           </motion.div>
         )}
         {children}
-      </div>
+      </motion.div>
     </section>
   );
 }

@@ -4,7 +4,9 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { LiveEngineProvider } from "@/components/providers/live-engine-provider";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { AmbientBackground } from "@/components/common/ambient-background";
+import { CinematicOverlay } from "@/components/common/cinematic-overlay";
 import { ExperienceProvider } from "@/components/providers/experience-provider";
+import { PerformanceProvider } from "@/components/providers/performance-provider";
 import "lenis/dist/lenis.css";
 import "./globals.css";
 
@@ -57,16 +59,19 @@ export default function RootLayout({
       suppressHydrationWarning
       className={`${inter.variable} ${playfair.variable} ${ebGaramond.variable} h-full`}
     >
-      <body className="min-h-full bg-background text-foreground antialiased grain-overlay theme-transition">
+      <body className="min-h-full bg-background text-foreground antialiased grain-overlay">
         <ThemeProvider>
-          <AmbientBackground />
-          <div className="relative z-[1]">
-            <TooltipProvider delayDuration={200}>
-              <ExperienceProvider>
-                <LiveEngineProvider>{children}</LiveEngineProvider>
-              </ExperienceProvider>
-            </TooltipProvider>
-          </div>
+          <PerformanceProvider>
+            <AmbientBackground />
+            <CinematicOverlay />
+            <div className="relative z-[1] theme-transition">
+              <TooltipProvider delayDuration={200}>
+                <ExperienceProvider>
+                  <LiveEngineProvider>{children}</LiveEngineProvider>
+                </ExperienceProvider>
+              </TooltipProvider>
+            </div>
+          </PerformanceProvider>
         </ThemeProvider>
       </body>
     </html>
