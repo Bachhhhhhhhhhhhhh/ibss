@@ -1,4 +1,5 @@
-import type { PredictionSeries, QuantMetric } from "@/types";
+import type { ChartDataPoint, PredictionSeries, QuantMetric } from "@/types";
+import type { EnergyWaterSnapshot } from "@/lib/quant/energy-water-model";
 
 export interface FacilityBaseline {
   baseYear: number;
@@ -93,5 +94,6 @@ export interface QuantEngineSnapshot {
   predictions: PredictionSeries[];
   emissionsHistory: { period: string; scope1: number; scope2: number; scope3: number }[];
   scoreHistory: { composite: number; emissions: number; renewable: number }[];
-  performanceHistory: { time: string; energy: number; water: number; timestamp: number }[];
+  performanceHistory: ChartDataPoint[];
+  energyWater: EnergyWaterSnapshot;
 }

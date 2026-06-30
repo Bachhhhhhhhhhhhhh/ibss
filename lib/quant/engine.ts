@@ -1,4 +1,5 @@
 import { ENGMA_BASELINE, initialSimulationInputs } from "@/lib/quant/baseline";
+import { computeEnergyWaterSnapshot } from "@/lib/quant/energy-water-model";
 import type {
   CarbonAvoidanceResult,
   EmissionsBreakdown,
@@ -271,6 +272,8 @@ function buildModelOutputs(
   esg: ESGPillarScores,
   carbonIntensity: number,
   esgAlpha: number,
+  ewIndex: number,
+  ewBreakdown: Record<string, number>,
   prev?: QuantModelOutput[]
 ): QuantModelOutput[] {
   const prevMap = new Map(prev?.map((o) => [o.modelId, o.value]) ?? []);
@@ -295,6 +298,7 @@ function buildModelOutputs(
     { modelId: "esg-composite", value: esg.composite, breakdown: { E: esg.environmental, S: esg.social, G: esg.governance } },
     { modelId: "holt-forecast", value: esg.composite },
     { modelId: "carbon-intensity", value: carbonIntensity },
+    { modelId: "energy-water", value: ewIndex, breakdown: ewBreakdown },
   ];
 
   return entries.map((e) => {
@@ -389,24 +393,11 @@ export function computeQuantTick({
     },
   ];
 
-  const now = Date.now();
-  const energyEff =
-    clamp(85 + nextInputs.energyReductionPct * 0.5, 70, 98);
-  const waterCirc = clamp(72 + nextInputs.waterEfficiencyPct * 0.6, 65, 95);
-
-  const performanceHistory = [
-    ...(prev?.performanceHistory ?? []).slice(-23),
-    {
-      time: new Date(now).toLocaleTimeString("en-US", {
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: false,
-      }),
-      energy: round(energyEff, 1),
-      water: round(waterCirc, 1),
-      timestamp: now,
-    },
-  ];
+  const energyWater = computeEnergyWaterSnapshot(
+    nextInputs,
+    prev?.performanceHistory
+  );
+  const performanceHistory = energyWater.history;
 
   const modelOutputs = buildModelOutputs(
     emissions,
@@ -415,6 +406,14 @@ export function computeQuantTick({
     esgScores,
     carbonIntensity,
     esgAlpha,
+    energyWater.breakdown.symbiosisEWIndex,
+    {
+      VRV: energyWater.breakdown.vrvSavingsPct,
+      LED: energyWater.breakdown.ledOptimizationPct,
+      Solar: energyWater.breakdown.solarContributionPct,
+      Rain: energyWater.breakdown.rainwaterHarvestPct,
+      Recycle: energyWater.breakdown.greywaterRecyclePct,
+    },
     prev?.modelOutputs
   );
 
@@ -444,6 +443,7 @@ export function computeQuantTick({
     emissionsHistory,
     scoreHistory,
     performanceHistory,
+    energyWater,
   };
 }
 

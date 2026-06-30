@@ -69,6 +69,15 @@ export const QUANT_MODELS = [
     unit: "t/M",
     color: "#fb7185",
   },
+  {
+    id: "energy-water",
+    name: "Energy-Water Performance",
+    nameVi: "Hiệu suất Năng lượng-Nước",
+    formula: "E-W = 0.55ηₑ + 0.45ηw | VRV+LED+Solar | Rain+Recycle",
+    formulaVi: "E-W = 0,55ηₙ + 0,45ηᵥ | VRV+LED+Solar | Mưa+Tái chế",
+    unit: "idx",
+    color: "#22d3ee",
+  },
 ] as const;
 
 export function initialSimulationInputs(): SimulationInputs {

@@ -25,6 +25,25 @@ export interface ChartDataPoint {
   energy: number;
   water: number;
   timestamp: number;
+  energyEfficiency?: number;
+  waterCircularity?: number;
+  vrvSavings?: number;
+  ledOptimization?: number;
+  solarContribution?: number;
+  gridDemand?: number;
+  renewableShare?: number;
+  rainwaterHarvest?: number;
+  greywaterRecycle?: number;
+  behavioralSaving?: number;
+  symbiosisEWIndex?: number;
+  kwhSavedHour?: number;
+  litresRecoveredHour?: number;
+  energyForecast?: number;
+  waterForecast?: number;
+  energyForecastLow?: number;
+  energyForecastHigh?: number;
+  waterForecastLow?: number;
+  waterForecastHigh?: number;
 }
 
 export interface LiveEvent {
