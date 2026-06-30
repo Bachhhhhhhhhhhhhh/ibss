@@ -1,5 +1,9 @@
 # Symbiosis Nexus 2026
 
+**Live site:** [https://bachhhhhhhhhhhhhh.github.io/ibss/](https://bachhhhhhhhhhhhhh.github.io/ibss/)
+
+> GitHub repo chỉ lưu code. Website chạy tại link trên (GitHub Pages), không phải trang repo.
+
 A premium interactive digital ESG strategy experience for the **2026 IBSS Bridging East and West Business Case Competition**, themed around **Engma Group's Symbiosis Philosophy and Global ESG Strategy**.
 
 ![Next.js](https://img.shields.io/badge/Next.js-16-black?style=flat-square&logo=next.js)

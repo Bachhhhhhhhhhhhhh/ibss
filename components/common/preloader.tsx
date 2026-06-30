@@ -14,20 +14,34 @@ export function Preloader() {
   const [phase, setPhase] = useState<"loading" | "ready">("loading");
 
   useEffect(() => {
-    if (reduced) return;
+    if (reduced) {
+      setDone(true);
+      return;
+    }
+
     const duration = 2200;
     const start = Date.now();
+    const finish = () => {
+      setProgress(100);
+      setPhase("ready");
+      setTimeout(() => setDone(true), 400);
+    };
+
     const timer = setInterval(() => {
       const p = Math.min(100, ((Date.now() - start) / duration) * 100);
       setProgress(p);
       if (p >= 100) {
         clearInterval(timer);
-        setPhase("ready");
-        setTimeout(() => setDone(true), 600);
+        finish();
       }
     }, 40);
 
-    return () => clearInterval(timer);
+    const safety = setTimeout(finish, 4500);
+
+    return () => {
+      clearInterval(timer);
+      clearTimeout(safety);
+    };
   }, [reduced]);
 
   if (reduced) return null;

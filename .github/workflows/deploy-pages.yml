@@ -33,6 +33,9 @@ jobs:
           GITHUB_PAGES: "true"
           NEXT_PUBLIC_BASE_PATH: "/ibss"
 
+      - name: Verify export output
+        run: test -f out/index.html && test -d out/_next/static/chunks
+
       - uses: actions/upload-pages-artifact@v3
         with:
           path: ./out
