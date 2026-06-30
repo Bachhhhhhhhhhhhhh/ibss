@@ -84,6 +84,9 @@ export interface HuiguiHotspot {
   icon: string;
 }
 
+export type MapRegion = "east" | "west" | "bridge" | "global";
+export type MapTier = "hub" | "regional" | "field" | "partnership";
+
 export interface MapLocation {
   id: string;
   name: string;
@@ -91,10 +94,21 @@ export interface MapLocation {
   lat: number;
   lng: number;
   pillar: Exclude<Pillar, "all">;
+  pillars?: Exclude<Pillar, "all">[];
+  region: MapRegion;
+  tier: MapTier;
+  year: number;
+  initiativeIds: string[];
+  connections: string[];
   description: string;
   descriptionVi: string;
   impactScore: number;
   metrics: { label: string; labelVi: string; value: string }[];
+  reach?: {
+    beneficiaries?: number;
+    investmentRmb?: number;
+    carbonTco2e?: number;
+  };
 }
 
 export interface StrategySliders {
