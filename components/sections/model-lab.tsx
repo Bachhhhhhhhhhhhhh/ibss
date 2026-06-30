@@ -11,6 +11,7 @@ import { ModelDetailPanel } from "@/components/sections/model-detail-panel";
 import { IntelHub } from "@/components/analytics/intel-hub";
 import { useI18nStore } from "@/lib/stores/i18n";
 import { useInView } from "@/lib/hooks/use-in-view";
+import { SceneErrorBoundary } from "@/components/three/scene-error-boundary";
 
 const ModelLabScene = dynamic(
   () => import("@/components/three/model-lab-scene").then((m) => m.ModelLabScene),
@@ -88,13 +89,15 @@ export function ModelLabSection() {
       <div className="grid lg:grid-cols-12 gap-6 lg:gap-8 items-start">
         <div className="lg:col-span-7 xl:col-span-8 space-y-4" ref={sceneRef}>
           <div className="relative">
-            <ModelLabScene
-              key={activeModel}
-              modelId={activeModel}
-              modelName={language === "en" ? entry.name : entry.nameVi}
-              accentColor={entry.accent}
-              isVisible={inView}
-            />
+            <SceneErrorBoundary language={language}>
+              <ModelLabScene
+                key={activeModel}
+                modelId={activeModel}
+                modelName={language === "en" ? entry.name : entry.nameVi}
+                accentColor={entry.accent}
+                isVisible={inView}
+              />
+            </SceneErrorBoundary>
 
             {/* Viewport controls legend */}
             <div className="absolute bottom-4 left-4 right-4 flex flex-wrap gap-2 pointer-events-none z-10">

@@ -10,7 +10,7 @@ function interpolateMetrics(from: LiveMetrics, to: LiveMetrics, t: number): Live
   const eased = easeOutCubic(t);
   return {
     symbiosisScore: lerp(from.symbiosisScore, to.symbiosisScore, eased),
-    symbiosisDelta: to.symbiosisDelta,
+    symbiosisDelta: lerp(from.symbiosisDelta, to.symbiosisDelta, eased),
     co2AvoidedTonnes: lerp(from.co2AvoidedTonnes, to.co2AvoidedTonnes, eased),
     treesPlantedMonth: Math.round(lerp(from.treesPlantedMonth, to.treesPlantedMonth, eased)),
     waterSavedTodayLitres: Math.round(lerp(from.waterSavedTodayLitres, to.waterSavedTodayLitres, eased)),

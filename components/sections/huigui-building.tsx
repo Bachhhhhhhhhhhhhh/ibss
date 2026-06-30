@@ -11,6 +11,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { huiguiHotspots, huiguiMetrics } from "@/lib/data/huigui-hotspots";
 import { useI18nStore } from "@/lib/stores/i18n";
 import { useInView } from "@/lib/hooks/use-in-view";
+import { SceneErrorBoundary } from "@/components/three/scene-error-boundary";
 import { cn } from "@/lib/utils";
 
 const HuiguiScene = dynamic(
@@ -58,11 +59,13 @@ export function HuiguiBuildingSection() {
             en="Tap any green tag below the building — or click a glowing dot on the 3D model — to see details."
             vi="Nhấn thẻ xanh bên dưới tòa nhà — hoặc chấm sáng trên mô hình 3D — để xem chi tiết."
           />
-          <HuiguiScene
-            activeHotspot={activeHotspot}
-            onSelectHotspot={setActiveHotspot}
-            isVisible={inView}
-          />
+          <SceneErrorBoundary language={language}>
+            <HuiguiScene
+              activeHotspot={activeHotspot}
+              onSelectHotspot={setActiveHotspot}
+              isVisible={inView}
+            />
+          </SceneErrorBoundary>
 
           {/* Hotspot picker — reliable fallback + syncs with 3D */}
           <div className="flex flex-wrap gap-2" role="tablist" aria-label="Huigui hotspots">

@@ -23,7 +23,7 @@ interface IntelFeedStore {
   addNewsItem: () => void;
 }
 
-export const useIntelFeedStore = create<IntelFeedStore>((set, get) => ({
+export const useIntelFeedStore = create<IntelFeedStore>((set) => ({
   news: NEWS_POOL.slice(0, 6).map((n, i) => ({
     ...n,
     id: `news-init-${i}`,

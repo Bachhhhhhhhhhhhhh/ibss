@@ -5,6 +5,7 @@ import { useFrame } from "@react-three/fiber";
 import { Float } from "@react-three/drei";
 import * as THREE from "three";
 import { friendlyPalette } from "@/lib/three/friendly-materials";
+import { seededRange } from "@/lib/three/seeded-random";
 
 export function BiodiversityHelix() {
   const helix = useRef<THREE.Group>(null);
@@ -21,8 +22,12 @@ export function BiodiversityHelix() {
 
   const fireflyPositions = useMemo(
     () =>
-      Array.from({ length: 20 }, () => ({
-        pos: [(Math.random() - 0.5) * 3, (Math.random() - 0.5) * 3, (Math.random() - 0.5) * 3] as [number, number, number],
+      Array.from({ length: 20 }, (_, i) => ({
+        pos: [
+          seededRange(i * 3, -1.5, 1.5),
+          seededRange(i * 3 + 1, -1.5, 1.5),
+          seededRange(i * 3 + 2, -1.5, 1.5),
+        ] as [number, number, number],
       })),
     []
   );

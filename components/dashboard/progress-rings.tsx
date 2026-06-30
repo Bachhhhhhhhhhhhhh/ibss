@@ -10,10 +10,11 @@ interface RingProps {
   label: string;
   current: number;
   target: number;
+  goalLabel: string;
   color: string;
 }
 
-function ProgressRing({ label, current, target, color }: RingProps) {
+function ProgressRing({ label, current, target, goalLabel, color }: RingProps) {
   const pct = Math.min(100, (current / target) * 100);
   const circumference = 2 * Math.PI * 40;
   const offset = circumference - (pct / 100) * circumference;
@@ -38,7 +39,7 @@ function ProgressRing({ label, current, target, color }: RingProps) {
         </div>
       </div>
       <p className="text-xs text-white/50 mt-2 text-center">{label}</p>
-      <p className="text-xs text-white/30">/ {target}% target</p>
+      <p className="text-xs text-white/30">{goalLabel}</p>
     </div>
   );
 }
@@ -47,10 +48,30 @@ export function ProgressRings() {
   const metrics = useLiveMetricsStore((s) => s.displayMetrics);
   const language = useI18nStore((s) => s.language);
 
+  const scope12Avg = (metrics.scope1Progress + metrics.scope2Progress) / 2;
+
   const rings: RingProps[] = [
-    { label: language === "en" ? "Scope 1+2" : "Phạm vi 1+2", current: metrics.scope1Progress + metrics.scope2Progress, target: 20, color: "#10b981" },
-    { label: language === "en" ? "Scope 3" : "Phạm vi 3", current: metrics.scope3Progress, target: 30, color: "#3b82f6" },
-    { label: language === "en" ? "Renewable" : "Tái tạo", current: metrics.renewablePercent, target: 100, color: "#f59e0b" },
+    {
+      label: language === "en" ? "Scope 1+2" : "Phạm vi 1+2",
+      current: scope12Avg,
+      target: 100,
+      goalLabel: language === "en" ? "SBTi −20% by 2030" : "SBTi −20% đến 2030",
+      color: "#10b981",
+    },
+    {
+      label: language === "en" ? "Scope 3" : "Phạm vi 3",
+      current: metrics.scope3Progress,
+      target: 100,
+      goalLabel: language === "en" ? "SBTi −30% by 2030" : "SBTi −30% đến 2030",
+      color: "#3b82f6",
+    },
+    {
+      label: language === "en" ? "Renewable" : "Tái tạo",
+      current: metrics.renewablePercent,
+      target: 100,
+      goalLabel: language === "en" ? "100% electricity by 2030" : "100% điện đến 2030",
+      color: "#f59e0b",
+    },
   ];
 
   return (

@@ -12,25 +12,30 @@ interface AnimatedCounterProps {
   className?: string;
 }
 
-export function AnimatedCounter({ value, decimals = 0, suffix = "", prefix = "", className }: AnimatedCounterProps) {
-  const spring = useSpring(value, { stiffness: 60, damping: 20, mass: 0.8 });
-  const display = useTransform(spring, (v) => formatNumber(v, decimals));
-  const ref = useRef<HTMLSpanElement>(null);
+export function AnimatedCounter({
+  value,
+  decimals = 0,
+  suffix = "",
+  prefix = "",
+  className,
+}: AnimatedCounterProps) {
+  const spring = useSpring(value, { stiffness: 80, damping: 24, mass: 0.6 });
+  const mounted = useRef(false);
+
+  const display = useTransform(spring, (v) => `${prefix}${formatNumber(v, decimals)}${suffix}`);
 
   useEffect(() => {
+    if (!mounted.current) {
+      spring.jump(value);
+      mounted.current = true;
+      return;
+    }
     spring.set(value);
   }, [value, spring]);
 
-  useEffect(() => {
-    const unsub = display.on("change", (v) => {
-      if (ref.current) ref.current.textContent = `${prefix}${v}${suffix}`;
-    });
-    return unsub;
-  }, [display, prefix, suffix]);
-
   return (
-    <motion.span ref={ref} className={className} aria-live="polite">
-      {prefix}{formatNumber(value, decimals)}{suffix}
+    <motion.span className={className} aria-live="polite">
+      {display}
     </motion.span>
   );
 }

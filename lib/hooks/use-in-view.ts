@@ -11,7 +11,7 @@ export function useInView<T extends Element>(
   ref: RefObject<T | null>,
   options: IntersectionObserverInit = DEFAULT_OPTIONS
 ): boolean {
-  const [inView, setInView] = useState(false);
+  const [inView, setInView] = useState(true);
   const rootMargin = options.rootMargin ?? DEFAULT_OPTIONS.rootMargin;
   const threshold = options.threshold ?? DEFAULT_OPTIONS.threshold;
   const root = options.root;

@@ -1,4 +1,4 @@
-import { ENGMA_BASELINE } from "@/lib/quant/baseline";
+import { ENGMA_BASELINE, initialSimulationInputs } from "@/lib/quant/baseline";
 import type {
   CarbonAvoidanceResult,
   EmissionsBreakdown,
@@ -130,7 +130,7 @@ export function computeESGScores(inputs: SimulationInputs): ESGPillarScores {
     0.5 * inputs.supplierSbtiPct + 0.3 * 96.2 + 0.2 * 100
   );
 
-  const composite = round(0.45 * environmental + 0.3 * social + 0.25 * governance, 1);
+  const composite = round(0.45 * environmental + 0.3 * social + 0.25 * governance, 2);
 
   return { environmental, social, governance, composite };
 }
@@ -192,8 +192,7 @@ export function holtForecast(
 }
 
 function buildPredictions(
-  history: { composite: number; emissions: number; renewable: number }[],
-  prevPredictions?: PredictionSeries[]
+  history: { composite: number; emissions: number; renewable: number }[]
 ): PredictionSeries[] {
   const compositeHist = history.map((h) => h.composite);
   const emissionsHist = history.map((h) => h.emissions);
@@ -427,7 +426,7 @@ export function computeQuantTick({
     prev?.metrics
   );
 
-  const predictions = buildPredictions(scoreHistory, prev?.predictions);
+  const predictions = buildPredictions(scoreHistory);
 
   return {
     tickIndex,
@@ -450,17 +449,7 @@ export function computeQuantTick({
 
 export function createInitialSnapshot(): QuantEngineSnapshot {
   let snapshot = computeQuantTick({
-    inputs: {
-      elapsedHours: 0,
-      renewableSharePct: 32,
-      energyReductionPct: 14,
-      waterEfficiencyPct: 18,
-      supplierSbtiPct: 44,
-      treesPlantedCumulative: 320,
-      firefliesActive: 2100,
-      educationReach: 820,
-      employeeCo2OffsetKg: 18000,
-    },
+    inputs: initialSimulationInputs(),
     hourStep: 0,
   });
 

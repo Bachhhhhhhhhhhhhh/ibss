@@ -4,13 +4,14 @@ import { computeQuantTick, createInitialSnapshot } from "@/lib/quant/engine";
 import type { QuantEngineSnapshot } from "@/lib/quant/types";
 import type { LiveMetrics } from "@/types";
 
-function snapshotToLiveMetrics(s: QuantEngineSnapshot): LiveMetrics {
-  const prevComposite = s.modelOutputs.find((o) => o.modelId === "esg-composite");
-  const delta = prevComposite?.delta ?? 0;
+function roundDelta(v: number) {
+  return Math.round(v * 100) / 100;
+}
 
+function snapshotToLiveMetrics(s: QuantEngineSnapshot, symbiosisDelta = 0): LiveMetrics {
   return {
     symbiosisScore: s.esgScores.composite,
-    symbiosisDelta: delta,
+    symbiosisDelta,
     co2AvoidedTonnes: s.carbonAvoidance.totalTonnes,
     treesPlantedMonth: s.inputs.treesPlantedCumulative,
     waterSavedTodayLitres: s.water.savedLitresToday,
@@ -41,8 +42,9 @@ export const useQuantEngineStore = create<QuantEngineStore>((set, get) => ({
       prev,
       hourStep,
     });
+    const symbiosisDelta = roundDelta(next.esgScores.composite - prev.esgScores.composite);
     set({ snapshot: next });
-    return snapshotToLiveMetrics(next);
+    return snapshotToLiveMetrics(next, symbiosisDelta);
   },
 
   reset: () => {

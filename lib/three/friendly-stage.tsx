@@ -1,6 +1,6 @@
 "use client";
 
-import { ContactShadows, Environment, Float } from "@react-three/drei";
+import { ContactShadows, Float } from "@react-three/drei";
 import type { ReactNode } from "react";
 import { friendlyPalette } from "@/lib/three/friendly-materials";
 
@@ -21,8 +21,6 @@ export function FriendlyStage({ children, accent = friendlyPalette.emerald, show
       <directionalLight position={[-4, 6, -3]} intensity={0.35} color="#a7f3d0" />
       <pointLight position={[0, 5, 2]} intensity={0.5} color={accent} distance={18} />
       <hemisphereLight args={["#d1fae5", friendlyPalette.night, 0.55]} />
-
-      <Environment preset="sunset" />
 
       {showPedestal && (
         <Float speed={1.2} rotationIntensity={0.02} floatIntensity={0.15}>

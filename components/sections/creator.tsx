@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { Sparkles } from "lucide-react";
 import { useI18nStore } from "@/lib/stores/i18n";
 import { useReducedMotion } from "@/lib/hooks/use-reduced-motion";
+import { assetPath } from "@/lib/asset-path";
 import { cn } from "@/lib/utils";
 
 const PARAGRAPHS_EN = [
@@ -60,7 +61,7 @@ export function CreatorSection() {
 
               <div className="relative rounded-3xl overflow-hidden border border-white/10 bg-[#021a0f]">
                 <Image
-                  src="/creator-portrait.png"
+                  src={assetPath("/creator-portrait.png")}
                   alt={language === "en" ? "Truong The Bach — Creator of Symbiosis Nexus 2026" : "Trương Thế Bách — Người sáng tạo Symbiosis Nexus 2026"}
                   width={640}
                   height={800}

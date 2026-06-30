@@ -1,3 +1,5 @@
+import { assetPath } from "@/lib/asset-path";
+
 export interface LofiTrack {
   id: string;
   title: string;
@@ -14,7 +16,7 @@ export const LOFI_PLAYLIST: LofiTrack[] = [
     title: "Morning Coffee",
     titleVi: "Cà phê buổi sáng",
     artist: "HoliznaCC0",
-    src: "/audio/temple-dawn-lofi.mp3",
+    src: assetPath("/audio/temple-dawn-lofi.mp3"),
     mood: "zen",
     duration: "3:11",
   },
@@ -23,7 +25,7 @@ export const LOFI_PLAYLIST: LofiTrack[] = [
     title: "Foggy Headed",
     titleVi: "Sương mù trên đỉnh",
     artist: "HoliznaCC0",
-    src: "/audio/misty-mountain-lofi.mp3",
+    src: assetPath("/audio/misty-mountain-lofi.mp3"),
     mood: "ambient",
     duration: "4:06",
   },
@@ -32,7 +34,7 @@ export const LOFI_PLAYLIST: LofiTrack[] = [
     title: "Something In the Air",
     titleVi: "Ánh trăng trên rêu",
     artist: "HoliznaCC0",
-    src: "/audio/moonlit-moss-lofi.mp3",
+    src: assetPath("/audio/moonlit-moss-lofi.mp3"),
     mood: "chill",
     duration: "2:11",
   },
@@ -41,7 +43,7 @@ export const LOFI_PLAYLIST: LofiTrack[] = [
     title: "Clouds",
     titleVi: "Đèn lồng trong mưa",
     artist: "HoliznaCC0",
-    src: "/audio/lantern-rain-lofi.mp3",
+    src: assetPath("/audio/lantern-rain-lofi.mp3"),
     mood: "zen",
     duration: "3:49",
   },
